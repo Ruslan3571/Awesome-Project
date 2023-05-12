@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Camera } from "expo-camera";
+import { Camera, CameraType } from "expo-camera";
 import { AntDesign } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 
 const initialState = {
@@ -20,18 +21,30 @@ const initialState = {
   password: "",
 };
 
-
-export default function RegistrationScreen() {
+export default function RegistrationScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isPasswordShow, setIsPasswordShow] = useState(true);
   const [state, setState] = useState(initialState);
+  const [camera, setCamera] = useState(null);
+  const [picture, setPicture] = useState("");
+
+  const takePicture = async () => {
+    const picture = await camera.takePictureAsync();
+    console.log(picture);
+    setPicture(picture.uri);
+  };
+
+  const onSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    console.log(state);
+    setState(initialState);
+  };
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    setState(initialState);
   };
-
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
@@ -52,11 +65,28 @@ export default function RegistrationScreen() {
                 }),
               }}
             >
-              <Camera style={styles.camera}>
-                <View style={styles.cameraContainer}>
-                  <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
-                </View>
+              <Camera style={styles.camera} ref={setCamera} type={CameraType.front}>
+                {picture && (
+                  <View style={styles.cameraContainer}>
+                    <Image source={{ uri: picture }} style={styles.picture} />
+                  </View>
+                )}
               </Camera>
+              {picture && (
+                <TouchableOpacity
+                  style={styles.touch}
+                  onPress={() => {
+                    setPicture("");
+                  }}
+                >
+                  <AntDesign name="closecircleo" size={25} color="#BDBDBD" />
+                </TouchableOpacity>
+              )}
+              {!picture && (
+                <TouchableOpacity style={styles.touch} onPress={takePicture}>
+                  <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
+                </TouchableOpacity>
+              )}
 
               <View style={styles.header}>
                 <Text style={styles.headerTitle}>Регистрация</Text>
@@ -107,15 +137,11 @@ export default function RegistrationScreen() {
                 </Text>
               </View>
 
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={styles.btn}
-                onPress={keyboardHide}
-              >
+              <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={onSubmit}>
                 <Text style={styles.btnTitle}>Зарегистрироваться</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("Login")}>
                 <Text style={styles.login}>Уже есть аккаунт? Войти</Text>
               </TouchableOpacity>
             </View>
@@ -155,10 +181,18 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: "hidden",
   },
-  cameraContainer: {
+
+  picture: {
+    width: 120,
+    height: 120,
+    borderRadius: 16,
+  },
+  touch: {
     position: "absolute",
-    bottom: 15,
-    right: -10,
+    bottom: 510,
+    right: 129,
+    backgroundColor: "#ffffff",
+    borderRadius: 50,
   },
 
   form: {

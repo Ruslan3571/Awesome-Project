@@ -58,12 +58,13 @@ export const useRoute = (isAuth) => {
             color: "#212121",
             fontSize: 17,
             background: "#FFFFFF",
+            marginLeft: 85,
           },
-          headerLeft: () => (
-            <TouchableOpacity style={{ marginRight: 55, paddingLeft: 15 }}>
-              <AntDesign name="arrowleft" size={24} color="#BDBDBD" />
-            </TouchableOpacity>
-          ),
+          // headerLeft: () => (
+          //   <TouchableOpacity style={{ marginRight: 55, paddingLeft: 15 }}>
+          //     <AntDesign name="arrowleft" size={24} color="#BDBDBD" />
+          //   </TouchableOpacity>
+          // ),
           tabBarIcon: ({ focused, size, color }) => (
             <View style={styles.plusIcon}>
               <AntDesign name="plus" size={24} color="#212121" />

@@ -19,6 +19,7 @@ const initialState = {
   login: "",
   email: "",
   password: "",
+  picture: "",
 };
 
 export default function RegistrationScreen({ navigation }) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -13,6 +13,7 @@ import {
 import { Camera, CameraType } from "expo-camera";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import * as Location from "expo-location";
 
 export default function CreatePostsScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -20,6 +21,20 @@ export default function CreatePostsScreen({ navigation }) {
   const [picture, setPicture] = useState("");
   const [title, setTitle] = useState("");
   const [place, setPlace] = useState("");
+  const [location, setLocation] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+      let locationRes = await Location.getCurrentPositionAsync({});
+      setLocation(locationRes);
+    })();
+  }, []);
 
   const takePicture = async () => {
     const picture = await camera.takePictureAsync();
@@ -27,8 +42,7 @@ export default function CreatePostsScreen({ navigation }) {
   };
 
   const sendData = () => {
-    console.log(navigation);
-    navigation.navigate("Home", { picture, title });
+    navigation.navigate("Home", { picture, title, location, place });
   };
 
   const keyboardHide = () => {

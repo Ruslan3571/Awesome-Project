@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
 export default function Home({ route, navigation }) {
@@ -38,15 +37,19 @@ export default function Home({ route, navigation }) {
                 <Feather name="message-circle" size={24} color="#BDBDBD" />
                 <Text style={styles.commentsCount}>0</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("Map", {
-                    location: item.location,
-                  })
-                }
-              >
-                <Ionicons name="location-outline" size={24} color="#BDBDBD" />
-              </TouchableOpacity>
+              <View>
+                <TouchableOpacity
+                  style={{ display: "flex", flexDirection: "row" }}
+                  onPress={() =>
+                    navigation.navigate("Map", {
+                      location: item.location,
+                    })
+                  }
+                >
+                  <Feather name="map-pin" size={24} color="#BDBDBD" />
+                  <Text style={styles.place}>{item.place.value}</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </>
         )}
@@ -70,7 +73,6 @@ const styles = StyleSheet.create({
   title: {
     marginHorizontal: 16,
     marginBottom: 8,
-    fontFamily: "Roboto-Medium",
     fontSize: 16,
   },
   wraper: {
@@ -88,5 +90,10 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontSize: 16,
     color: "#BDBDBD",
+  },
+  place: {
+    textAlign: "right",
+    textDecorationLine: "underline",
+    fontSize: 16
   },
 });

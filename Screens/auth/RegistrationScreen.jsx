@@ -49,7 +49,10 @@ export default function RegistrationScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
-        <ImageBackground style={styles.image} source={require("../assets/images/bg.png")}>
+        <ImageBackground
+          style={styles.image}
+          source={require("../../assets/images/bg.png")}
+        >
           <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}>
             <View
               style={{
@@ -181,7 +184,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: "hidden",
   },
-
+  cameraContainer: {
+    position: "absolute",
+  },
   picture: {
     width: 120,
     height: 120,

@@ -29,7 +29,7 @@ export default function Home({ route, navigation }) {
               <TouchableOpacity
                 style={styles.comments}
                 onPress={() =>
-                  navigation.navigate("Comments", {
+                  navigation.navigate("Комментарии", {
                     postId: item.id,
                     picture: item.picture,
                   })

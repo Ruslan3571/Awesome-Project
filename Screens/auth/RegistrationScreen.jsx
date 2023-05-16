@@ -14,6 +14,9 @@ import {
   TouchableWithoutFeedback,
   Image,
 } from "react-native";
+import { useDispatch } from "react-redux";
+
+import { authSignUpUser } from "../../redux/auth/authOperations";
 
 const initialState = {
   login: "",
@@ -27,18 +30,19 @@ export default function RegistrationScreen({ navigation }) {
   const [isPasswordShow, setIsPasswordShow] = useState(true);
   const [state, setState] = useState(initialState);
   const [camera, setCamera] = useState(null);
-  const [picture, setPicture] = useState("");
+
+  const dispatch = useDispatch();
 
   const takePicture = async () => {
+    const { status } = await Camera.requestCameraPermissionsAsync();
     const picture = await camera.takePictureAsync();
-    console.log(picture);
-    setPicture(picture.uri);
+    setState((prevState) => ({ ...prevState, picture: picture.uri }));
   };
 
   const onSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
+    dispatch(authSignUpUser(state));
     setState(initialState);
   };
 
@@ -70,23 +74,23 @@ export default function RegistrationScreen({ navigation }) {
               }}
             >
               <Camera style={styles.camera} ref={setCamera} type={CameraType.front}>
-                {picture && (
+                {state.picture && (
                   <View style={styles.cameraContainer}>
-                    <Image source={{ uri: picture }} style={styles.picture} />
+                    <Image source={{ uri: state.picture }} style={styles.picture} />
                   </View>
                 )}
               </Camera>
-              {picture && (
+              {state.picture && (
                 <TouchableOpacity
                   style={styles.touch}
                   onPress={() => {
-                    setPicture("");
+                    setState((prevState) => ({ ...prevState, picture: "" }));
                   }}
                 >
                   <AntDesign name="closecircleo" size={25} color="#BDBDBD" />
                 </TouchableOpacity>
               )}
-              {!picture && (
+              {!state.picture && (
                 <TouchableOpacity style={styles.touch} onPress={takePicture}>
                   <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
                 </TouchableOpacity>

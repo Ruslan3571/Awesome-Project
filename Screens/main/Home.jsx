@@ -1,20 +1,36 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Text, View, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
+import db from "../../firebase/config";
 import { Feather } from "@expo/vector-icons";
 
 export default function Home({ route, navigation }) {
   const [posts, setPosts] = useState([]);
+  const { email, picture, login } = useSelector((state) => state.auth);
   console.log(route.params);
 
+  const getAllPosts = async () => {
+    await db
+      .firestore()
+      .collection("posts")
+      .onSnapshot((data) =>
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+  };
+
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
-  console.log(posts);
+    getAllPosts();
+  }, []);
 
   return (
     <View style={styles.container}>
+      <View style={styles.info}>
+        <Image source={{ uri: picture }} style={styles.avatar} />
+        <View style={styles.nameEmail}>
+          <Text style={styles.login}>{login}</Text>
+          <Text style={styles.email}>{email}</Text>
+        </View>
+      </View>
       <FlatList
         data={posts}
         keyExtractor={(item, index) => index.toString()}
@@ -64,6 +80,28 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#ffffff",
   },
+  info: {
+    display: "flex",
+    flexDirection: "row",
+    marginLeft: 16,
+    marginTop: 32,
+    alignItems: "center",
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 16,
+    marginRight: 8,
+  },
+  login: {
+    fontSize: 13,
+    lineHeight: 15,
+    color: "#212121 ",
+  },
+  email: {
+    fontSize: 11,
+    color: "rgba(33, 33, 33, 0.8)  ",
+  },
   img: {
     marginHorizontal: 16,
     height: 240,
@@ -94,6 +132,6 @@ const styles = StyleSheet.create({
   place: {
     textAlign: "right",
     textDecorationLine: "underline",
-    fontSize: 16
+    fontSize: 16,
   },
 });

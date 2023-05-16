@@ -1,29 +1,31 @@
-import React, { useState } from "react";
-import * as Font from "expo-font";
-import AppLoading from "expo-app-loading";
+import React, { useCallback } from "react";
 
-import { NavigationContainer } from "@react-navigation/native";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
-import { useRoute } from "./router";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
-const loadApplication = async () => {
-  await Font.loadAsync({
-    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-  });
-};
+import Main from "./components/Main";
 
 export default function App() {
-  const [isReady, setIsReady] = useState(false);
-  const routing = useRoute({});
+  const [fontsLoaded] = useFonts({
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+  });
 
-  if (!isReady) {
-    return (
-      <AppLoading
-        startAsync={loadApplication}
-        onFinish={() => setIsReady(true)}
-        onError={console.warn}
-      />
-    );
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
   }
-  return <NavigationContainer>{routing}</NavigationContainer>;
+
+  return (
+    <Provider store={store}>
+      <Main onLayout={onLayoutRootView} />
+    </Provider>
+  );
 }

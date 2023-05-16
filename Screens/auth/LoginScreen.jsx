@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-
-import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
@@ -13,6 +11,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../redux/auth/authOperations";
 
 const initialState = {
   email: "",
@@ -24,10 +24,12 @@ export default function LoginScreen({ navigation }) {
   const [state, setState] = useState(initialState);
   const [isPasswordShow, setIsPasswordShow] = useState(true);
 
+  const dispatch = useDispatch();
+
   const onSubmit = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
-    console.log(state);
+    dispatch(authSignInUser(state));
     setState(initialState);
   };
 

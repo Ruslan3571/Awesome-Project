@@ -6,10 +6,19 @@ import CommentsScreen from "./CommentsScreen";
 import MapScreen from "./MapScreen";
 import { TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { authSignOutUser } from "../../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
+import { AntDesign } from "@expo/vector-icons";
 
 const NestedScreen = createStackNavigator();
 
-export default function PostsScreen() {
+export default function PostsScreen({ navigation }) {
+  const dispatch = useDispatch();
+
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
+
   return (
     <NestedScreen.Navigator>
       <NestedScreen.Screen
@@ -20,19 +29,38 @@ export default function PostsScreen() {
           headerTitleStyle: {
             color: "#212121",
             fontSize: 17,
+            lineHeight: 22,
             background: "#FFFFFF",
-            textAlign: "left",
-            marginLeft: 120,
           },
           headerRight: () => (
-            <TouchableOpacity style={{ marginRight: 16 }}>
+            <TouchableOpacity style={{ marginRight: 16 }} onPress={signOut}>
               <Feather name="log-out" size={24} color="#BDBDBD" />
             </TouchableOpacity>
           ),
         }}
       />
-      <NestedScreen.Screen name="Комментарии" component={CommentsScreen} />
-      <NestedScreen.Screen name="Map" component={MapScreen} />
+      <NestedScreen.Screen
+        name="Комментарии"
+        component={CommentsScreen}
+        options={{
+          title: "Комментарии",
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{ marginLeft: 16 }}
+              onPress={() => {
+                navigation.navigate("Home");
+              }}
+            >
+              <AntDesign name="arrowleft" size={24} color="rgba(33, 33, 33, 0.8)" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <NestedScreen.Screen
+        name="Map"
+        component={MapScreen}
+        options={{ title: "Карта" }}
+      />
     </NestedScreen.Navigator>
   );
 }

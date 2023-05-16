@@ -4,14 +4,14 @@ import MapView, { Marker } from "react-native-maps";
 
 export default function MapScreen({ route }) {
   console.log(route.params);
-
+  const { longitude, latitude } = route.params.location;
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
         initialRegion={{
-          // latitude: route.params?.location?.coords.latitude,
-          // longitude: route.params?.location?.coords.longitude,
+          // latitude: latitude,
+          // longitude: longitude,
           latitude: 50.516339,
           longitude: 30.602185,
           latitudeDelta: 0.01,
@@ -20,8 +20,8 @@ export default function MapScreen({ route }) {
       >
         <Marker
           coordinate={{
-            // latitude: route.params?.location?.coords.latitude,
-            // longitude: route.params?.location?.coords.longitude,
+            // latitude: latitude,
+            // longitude: longitude,
             latitude: 50.516339,
             longitude: 30.602185,
           }}

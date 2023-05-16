@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Text,
   View,
@@ -14,6 +15,8 @@ import { Camera, CameraType } from "expo-camera";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import db from "../../firebase/config";
+import { nanoid } from "nanoid";
 
 export default function CreatePostsScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -23,6 +26,7 @@ export default function CreatePostsScreen({ navigation }) {
   const [place, setPlace] = useState("");
   const [location, setLocation] = useState(null);
 
+  const { userId, login } = useSelector((state) => state.auth);
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -37,12 +41,43 @@ export default function CreatePostsScreen({ navigation }) {
   }, []);
 
   const takePicture = async () => {
-    const picture = await camera.takePictureAsync();
-    setPicture(picture.uri);
+    const { uri } = await camera.takePictureAsync();
+    setPicture(uri);
+  };
+  const sendData = () => {
+    uploadPostToServer();
+    navigation.navigate("Home");
+    setPicture("");
+    setTitle("");
+    setPlace("");
+  };
+  const uploadPostToServer = async () => {
+    const picture = await uploadPhotoToServer();
+    const createPost = await db.firestore().collection("posts").add({
+      picture,
+      title,
+      location: location.coords,
+      place,
+      userId,
+      login,
+    });
   };
 
-  const sendData = () => {
-    navigation.navigate("Home", { picture, title, location, place });
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(picture);
+    const file = await response.blob();
+
+    const uniquePostId = nanoid();
+
+    await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+
+    const processedPhoto = await db
+      .storage()
+      .ref("postImage")
+      .child(uniquePostId)
+      .getDownloadURL();
+
+    return processedPhoto;
   };
 
   const keyboardHide = () => {

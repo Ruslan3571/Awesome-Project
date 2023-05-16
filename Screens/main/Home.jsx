@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   email: {
     fontSize: 11,
-    color: "rgba(33, 33, 33, 0.8)  ",
+    color: "#212121",
   },
   img: {
     marginHorizontal: 16,

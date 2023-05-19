@@ -16,7 +16,6 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import db from "../../firebase/config";
-import { nanoid } from "nanoid";
 
 export default function CreatePostsScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -46,7 +45,7 @@ export default function CreatePostsScreen({ navigation }) {
   };
   const sendData = () => {
     uploadPostToServer();
-    navigation.navigate("Home");
+    navigation.navigate("Home", { picture });
     setPicture("");
     setTitle("");
     setPlace("");
@@ -67,7 +66,7 @@ export default function CreatePostsScreen({ navigation }) {
     const response = await fetch(picture);
     const file = await response.blob();
 
-    const uniquePostId = nanoid();
+    const uniquePostId = Date.now().toString();
 
     await db.storage().ref(`postImage/${uniquePostId}`).put(file);
 

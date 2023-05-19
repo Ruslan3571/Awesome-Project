@@ -19,7 +19,7 @@ export default function CommentsScreen({ route }) {
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
   const { postId } = route.params;
-  const { picture } = useSelector((state) => state.auth);
+  const { login } = useSelector((state) => state.auth);
 
   useEffect(() => {
     getAllComments();
@@ -30,7 +30,7 @@ export default function CommentsScreen({ route }) {
       .collection("posts")
       .doc(postId)
       .collection("comments")
-      .add({ comment, picture });
+      .add({ comment, login });
 
     setComment("");
   };
@@ -59,7 +59,7 @@ export default function CommentsScreen({ route }) {
               <Image source={{ uri: item.picture }} style={styles.avatar} />
               <View style={styles.boxText}>
                 <Text style={styles.textComment}>{item.comment}</Text>
-                <Text style={styles.dateComment}></Text>
+                <Text>{item.login}</Text>
               </View>
             </View>
           )}
@@ -77,7 +77,7 @@ export default function CommentsScreen({ route }) {
             placeholderTextColor="#BDBDBD"
           />
 
-          <TouchableOpacity onPress={createComment}>
+          <TouchableOpacity onPress={createComment} style={styles.btn}>
             <AntDesign name="arrowup" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF6C00",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "50%",
+    borderRadius: 50,
   },
   list: {
     marginBottom: 32,

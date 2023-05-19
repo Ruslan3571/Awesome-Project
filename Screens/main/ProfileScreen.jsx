@@ -71,7 +71,7 @@ export default function ProfileScreen({ navigation }) {
                     <TouchableOpacity
                       style={styles.comments}
                       onPress={() =>
-                        navigation.navigate("Comments", {
+                        navigation.navigate("Комментарии", {
                           postId: item.id,
                           picture: item.picture,
                         })

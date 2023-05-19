@@ -1,7 +1,10 @@
 {
   "expo": {
     "name": "AwesomeProject",
-    "slug": "AwesomeProject",
+    "slug": "social-network",
+    "privacy": "public",
+    "description": "Social network",
+    "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,9 +14,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "jsEngine": "hermes",
     "ios": {
       "jsEngine": "jsc",

@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     marginBottom: 33,
     fontSize: 30,
-    fontWeight: 500,
+    // fontWeight: 500,
   },
 
   form: {

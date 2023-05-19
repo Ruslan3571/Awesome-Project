@@ -20,7 +20,7 @@ import { authSignUpUser } from "../../redux/auth/authOperations";
 
 const initialState = {
   login: "",
-  email: "",
+  mail: "",
   password: "",
   picture: "",
 };
@@ -116,10 +116,10 @@ export default function RegistrationScreen({ navigation }) {
                 <TextInput
                   style={styles.input}
                   placeholder="Адрес электронной почты"
-                  value={state.email}
+                  value={state.mail}
                   onFocus={() => setIsShowKeyboard(true)}
                   onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
+                    setState((prevState) => ({ ...prevState, mail: value }))
                   }
                 />
               </View>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     marginBottom: 33,
     fontSize: 30,
-    fontWeight: 500,
+    // fontWeight: 500,
   },
   camera: {
     flex: 1,
